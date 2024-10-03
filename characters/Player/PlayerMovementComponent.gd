@@ -242,6 +242,8 @@ func _on_death():
 	head_coll.set_disabled(true)
 	body_coll.set_disabled(true)
 	
+	speed_multiplier = 1.0
+	
 	if not is_multiplayer_authority(): return
 	
 	disable_camera_control()

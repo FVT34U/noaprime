@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://d21vfafwu2pix"]
+[gd_scene load_steps=15 format=3 uid="uid://d21vfafwu2pix"]
 
 [ext_resource type="Script" path="res://characters/Player/PlayerController.gd" id="1_birm8"]
 [ext_resource type="PackedScene" uid="uid://c70j4gwjolfxr" path="res://weapons/DefaultGun.tscn" id="3_4oaxr"]
 [ext_resource type="Script" path="res://characters/Player/PlayerMovementComponent.gd" id="3_utork"]
 [ext_resource type="Script" path="res://characters/Player/HitBoxComponent.gd" id="4_2aedl"]
+[ext_resource type="PackedScene" uid="uid://bhxdmow1u62ry" path="res://characters/Player/IndicatorComponent.tscn" id="5_hklya"]
 [ext_resource type="Script" path="res://characters/Player/HealthComponent.gd" id="5_j4lsy"]
 [ext_resource type="Script" path="res://characters/Player/StaminaComponent.gd" id="6_rajcm"]
 [ext_resource type="Script" path="res://characters/Player/WeaponComponent.gd" id="7_2kp8g"]
@@ -109,6 +110,9 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, -0.75, 0)
 
+[node name="IndicatorComponent" parent="PlayerMovementComponent" node_paths=PackedStringArray("state_machine") instance=ExtResource("5_hklya")]
+state_machine = NodePath("../../StateMachine")
+
 [node name="HealthComponent" type="Node" parent="." node_paths=PackedStringArray("controller")]
 script = ExtResource("5_j4lsy")
 controller = NodePath("..")
@@ -125,8 +129,9 @@ active_weapon_slot = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot"
 controller = NodePath("..")
 shot_impact_exist_time = 1.0
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("movement_component")]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("controller", "movement_component")]
 script = ExtResource("8_vuaqr")
+controller = NodePath("..")
 movement_component = NodePath("../PlayerMovementComponent")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
