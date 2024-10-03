@@ -16,6 +16,10 @@ run/main_scene="res://levels/test_level.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+ConnectionProperties="*res://utils/ConnectionProperties.gd"
+
 [editor]
 
 run/main_run_args="--headless"

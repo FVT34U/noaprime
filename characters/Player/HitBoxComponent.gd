@@ -1,7 +1,7 @@
 extends Area3D
 class_name HitboxComponent
 
-@export var health_component: Node
+@export var health_component: HealthComponent
 @export var hitbox_type: HitboxType.HITBOX_TYPE = HitboxType.HITBOX_TYPE.ANY
 
 func get_hitbox_type():

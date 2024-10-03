@@ -1,7 +1,7 @@
 extends Node3D
 
 
-const PORT = 8080
+const PORT = 8000
 
 @onready var player_scene = load('res://characters/Player/Player.tscn')
 @onready var players_list_node = $PlayersList
@@ -34,6 +34,8 @@ func add_player(id: int):
 	var sp = _get_random_unique_spawnpoint()
 	player.player_movement_component.global_position = sp.global_position
 	_unavailable_spawnpoints.append(sp)
+	
+	print("[{timestamp}][LOG]: Player {id} added".format({"timestamp": DateTime.get_current_time(), "id": id}))
 	
 	rpc(
 		'chat_message',
@@ -80,13 +82,17 @@ func _clear_unavailable_spawnpoints():
 func _ready():
 	var peer = ENetMultiplayerPeer.new()
 	if DisplayServer.get_name() == 'headless':
-		peer.create_server(PORT)
-		multiplayer.multiplayer_peer = peer
+		var res = peer.create_server(PORT)
 		
-		multiplayer.peer_connected.connect(add_player)
-		multiplayer.peer_disconnected.connect(remove_player)
+		if res == OK:
+			multiplayer.multiplayer_peer = peer
+			
+			multiplayer.peer_connected.connect(add_player)
+			multiplayer.peer_disconnected.connect(remove_player)
+			
+			print("[{timestamp}][LOG]: SERVER CREATED".format({"timestamp": DateTime.get_current_time()}))
 	else:
-		peer.create_client('localhost', PORT)
-		multiplayer.multiplayer_peer = peer
-	
-	_clear_unavailable_spawnpoints()
+		var res = peer.create_client(ConnectionProperties.ip, ConnectionProperties.port)
+		if res == OK:
+			multiplayer.multiplayer_peer = peer
+			print("[{timestamp}][LOG]: Client connected".format({"timestamp": DateTime.get_current_time()}))

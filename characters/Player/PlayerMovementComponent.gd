@@ -4,6 +4,8 @@ class_name PlayerMovementComponent
 @export_category("Components")
 @export var player_controller: PlayerController
 @export var stamina_component: StaminaComponent
+@export var head_hitbox: HitboxComponent
+@export var body_hitbox: HitboxComponent
 
 @export_category("Movement")
 @export var max_speed = 5.0

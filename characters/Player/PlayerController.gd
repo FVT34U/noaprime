@@ -37,6 +37,8 @@ func death_handler(init_id: int):
 				}
 			),
 		)
+		
+		print("[{timestamp}][LOG]: Message sended from server".format({"timestamp": DateTime.get_current_time()}))
 	
 	if is_multiplayer_authority():
 		# Set cursor visible

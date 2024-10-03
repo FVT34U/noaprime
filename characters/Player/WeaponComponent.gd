@@ -61,7 +61,11 @@ func shoot():
 		origin,
 		end,
 		4096,
-		[controller.player_movement_component],
+		[
+			controller.player_movement_component,
+			controller.player_movement_component.head_hitbox,
+			controller.player_movement_component.body_hitbox,
+		],
 	)
 	hit_query.collide_with_areas = true
 	hit_query.collide_with_bodies = false

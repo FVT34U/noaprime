@@ -42,10 +42,12 @@ stamina_component = NodePath("StaminaComponent")
 weapon_component = NodePath("WeaponComponent")
 state_machine = NodePath("StateMachine")
 
-[node name="PlayerMovementComponent" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player_controller", "stamina_component")]
+[node name="PlayerMovementComponent" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player_controller", "stamina_component", "head_hitbox", "body_hitbox")]
 script = ExtResource("3_utork")
 player_controller = NodePath("..")
 stamina_component = NodePath("../StaminaComponent")
+head_hitbox = NodePath("HeadHitBox")
+body_hitbox = NodePath("BodyHitBox")
 sprint_multiplier = 2.0
 mouse_sensitivity = 0.03
 

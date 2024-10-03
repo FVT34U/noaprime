@@ -4,12 +4,11 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bgeiwwgptvynn"
-path="res://.godot/imported/de_dust2.blend-d9de975ce273bcb7a28e4d1985a0abba.scn"
+valid=false
 
 [deps]
 
 source_file="res://meshes/de_dust2.blend"
-dest_files=["res://.godot/imported/de_dust2.blend-d9de975ce273bcb7a28e4d1985a0abba.scn"]
 
 [params]
 
