@@ -1,0 +1,175 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4k512wjwrx1w"]
+
+[ext_resource type="Script" path="res://characters/Player/HUDController.gd" id="1_1uwjr"]
+[ext_resource type="Texture2D" uid="uid://bk6uha1d2g7aa" path="res://textures/Crosshair.png" id="2_yg81p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hrnu5"]
+font_size = 48
+font_color = Color(1, 0.541241, 0.476759, 1)
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+script = ExtResource("1_1uwjr")
+
+[node name="Interface" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Interface"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="Interface/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Interface/VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="VBoxContainer" parent="Interface/VBoxContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Interface/VBoxContainer/Control/HBoxContainer/Control"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "HEALTH: "
+horizontal_alignment = 1
+
+[node name="HealthValue" type="Label" parent="Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.0
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Interface/VBoxContainer/Control/HBoxContainer/Control"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "STAMINA: "
+
+[node name="StaminaValue" type="Label" parent="Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.0
+"
+
+[node name="Control2" type="Control" parent="Interface/VBoxContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="Interface/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Interface/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Interface/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Interface/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Chat" type="VBoxContainer" parent="Interface/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="Message" type="Label" parent="Interface/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/Chat"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "> This is chat)"
+
+[node name="ChatInput" type="LineEdit" parent="Interface/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 1
+placeholder_text = "enter message"
+max_length = 100
+
+[node name="Control" type="Control" parent="Interface/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Control2" type="Control" parent="Interface/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Crosshair" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(50, 50)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_yg81p")
+
+[node name="DeathScreen" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="DeathScreen"]
+layout_mode = 2
+text = "YOU DIED"
+label_settings = SubResource("LabelSettings_hrnu5")
+horizontal_alignment = 1
+
+[connection signal="focus_exited" from="Interface/VBoxContainer/HBoxContainer/VBoxContainer/ChatInput" to="." method="_on_chat_input_focus_exited"]
+[connection signal="text_change_rejected" from="Interface/VBoxContainer/HBoxContainer/VBoxContainer/ChatInput" to="." method="_on_chat_input_text_change_rejected"]
+[connection signal="text_submitted" from="Interface/VBoxContainer/HBoxContainer/VBoxContainer/ChatInput" to="." method="_on_chat_input_text_submitted"]

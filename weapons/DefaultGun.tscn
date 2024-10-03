@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://c70j4gwjolfxr"]
+
+[ext_resource type="Script" path="res://weapons/DefaultGun.gd" id="1_yodbv"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3bkfq"]
+radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jq1em"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_j82fq"]
+material = SubResource("StandardMaterial3D_jq1em")
+radius = 0.1
+height = 0.2
+
+[node name="DefaultGun" type="Node3D"]
+script = ExtResource("1_yodbv")
+max_range = 1000.0
+
+[node name="GunMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_3bkfq")
+skeleton = NodePath("../../../..")
+
+[node name="Muzzle" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.85498e-09, -0.502096)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Muzzle"]
+mesh = SubResource("SphereMesh_j82fq")

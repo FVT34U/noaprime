@@ -1,0 +1,132 @@
+[gd_scene load_steps=14 format=3 uid="uid://d21vfafwu2pix"]
+
+[ext_resource type="Script" path="res://characters/Player/PlayerController.gd" id="1_birm8"]
+[ext_resource type="PackedScene" uid="uid://c70j4gwjolfxr" path="res://weapons/DefaultGun.tscn" id="3_4oaxr"]
+[ext_resource type="Script" path="res://characters/Player/PlayerMovementComponent.gd" id="3_utork"]
+[ext_resource type="Script" path="res://characters/Player/HitBoxComponent.gd" id="4_2aedl"]
+[ext_resource type="Script" path="res://characters/Player/HealthComponent.gd" id="5_j4lsy"]
+[ext_resource type="Script" path="res://characters/Player/StaminaComponent.gd" id="6_rajcm"]
+[ext_resource type="Script" path="res://characters/Player/WeaponComponent.gd" id="7_2kp8g"]
+[ext_resource type="Script" path="res://characters/Player/StateMachine.gd" id="8_vuaqr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f6wc3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6jelb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pc3vs"]
+radius = 0.4
+height = 0.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fd00r"]
+height = 1.2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rv7ds"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("../HealthComponent:health")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("../StaminaComponent:stamina")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[node name="PlayerController" type="Node" node_paths=PackedStringArray("player_movement_component", "health_component", "stamina_component", "weapon_component", "state_machine")]
+script = ExtResource("1_birm8")
+player_movement_component = NodePath("PlayerMovementComponent")
+health_component = NodePath("HealthComponent")
+stamina_component = NodePath("StaminaComponent")
+weapon_component = NodePath("WeaponComponent")
+state_machine = NodePath("StateMachine")
+
+[node name="PlayerMovementComponent" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player_controller", "stamina_component")]
+script = ExtResource("3_utork")
+player_controller = NodePath("..")
+stamina_component = NodePath("../StaminaComponent")
+sprint_multiplier = 2.0
+mouse_sensitivity = 0.03
+
+[node name="Mesh" type="MeshInstance3D" parent="PlayerMovementComponent"]
+mesh = SubResource("CapsuleMesh_f6wc3")
+
+[node name="MeshCollision" type="CollisionShape3D" parent="PlayerMovementComponent"]
+shape = SubResource("CapsuleShape3D_6jelb")
+
+[node name="Head" type="Node3D" parent="PlayerMovementComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+
+[node name="SmoothCamera" type="Node3D" parent="PlayerMovementComponent/Head"]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="PlayerMovementComponent/Head/SmoothCamera"]
+fov = 90.0
+
+[node name="ActiveWeaponSlot" type="Node3D" parent="PlayerMovementComponent/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.472824, -0.259424, -0.758938)
+
+[node name="Gun" parent="PlayerMovementComponent/Head/ActiveWeaponSlot" instance=ExtResource("3_4oaxr")]
+damage = 10.0
+headshot_multiplier = 2.0
+
+[node name="HeadHitBox" type="Area3D" parent="PlayerMovementComponent" node_paths=PackedStringArray("health_component")]
+collision_layer = 4096
+collision_mask = 2048
+script = ExtResource("4_2aedl")
+health_component = NodePath("../../HealthComponent")
+hitbox_type = 1
+
+[node name="HeadCollision" type="CollisionShape3D" parent="PlayerMovementComponent/HeadHitBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CapsuleShape3D_pc3vs")
+
+[node name="BodyHitBox" type="Area3D" parent="PlayerMovementComponent" node_paths=PackedStringArray("health_component")]
+collision_layer = 4096
+collision_mask = 2048
+script = ExtResource("4_2aedl")
+health_component = NodePath("../../HealthComponent")
+hitbox_type = 2
+
+[node name="BodyCollision" type="CollisionShape3D" parent="PlayerMovementComponent/BodyHitBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+shape = SubResource("CapsuleShape3D_fd00r")
+
+[node name="GroundCheck" type="RayCast3D" parent="PlayerMovementComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="StairsAheadRayCast3D" type="RayCast3D" parent="PlayerMovementComponent"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -0.5)
+target_position = Vector3(0, -0.55, 0)
+
+[node name="StairsBelowRayCast3D" type="RayCast3D" parent="PlayerMovementComponent"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+target_position = Vector3(0, -0.75, 0)
+
+[node name="HealthComponent" type="Node" parent="." node_paths=PackedStringArray("controller")]
+script = ExtResource("5_j4lsy")
+controller = NodePath("..")
+
+[node name="StaminaComponent" type="Node" parent="." node_paths=PackedStringArray("controller", "movement_component", "state_machine")]
+script = ExtResource("6_rajcm")
+controller = NodePath("..")
+movement_component = NodePath("../PlayerMovementComponent")
+state_machine = NodePath("../StateMachine")
+
+[node name="WeaponComponent" type="Node" parent="." node_paths=PackedStringArray("active_weapon_slot", "controller")]
+script = ExtResource("7_2kp8g")
+active_weapon_slot = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot")
+controller = NodePath("..")
+shot_impact_exist_time = 1.0
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("movement_component")]
+script = ExtResource("8_vuaqr")
+movement_component = NodePath("../PlayerMovementComponent")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../PlayerMovementComponent")
+replication_config = SubResource("SceneReplicationConfig_rv7ds")
