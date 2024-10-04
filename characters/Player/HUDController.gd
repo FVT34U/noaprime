@@ -1,5 +1,5 @@
 extends Control
-
+class_name HUDComponent
 
 @onready var chat = \
 $Interface/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/Chat

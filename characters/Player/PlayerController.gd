@@ -7,6 +7,7 @@ class_name PlayerController
 @export var stamina_component: StaminaComponent
 @export var weapon_component: WeaponComponent
 @export var state_machine: CharacterStateMachine
+@export var indicator_component: IndicatorComponent
 
 @export_category("Stats")
 @export var respawn_time = 5.0
@@ -14,7 +15,7 @@ class_name PlayerController
 @onready var camera = $PlayerMovementComponent/Head/SmoothCamera/Camera3D
 
 
-var hud: Control
+var hud: HUDComponent
 var world: GameMode
 
 var is_menu_opened = false
@@ -113,6 +114,9 @@ func _ready():
 	if not hud:
 		hud = preload("res://characters/Player/HUD.tscn").instantiate()
 		add_child(hud)
+	
+	# Set username
+	world.rpc("set_players_username", multiplayer.get_unique_id(), ConnectionProperties.username)
 	
 	# Mouse cursor to game
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

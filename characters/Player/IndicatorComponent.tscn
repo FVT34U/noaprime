@@ -25,7 +25,7 @@ disable_3d = true
 transparent_bg = true
 size = Vector2i(128, 32)
 
-[node name="Label" type="Label" parent="SubViewport"]
+[node name="Username" type="Label" parent="SubViewport"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

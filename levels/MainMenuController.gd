@@ -17,5 +17,6 @@ func _on_play_btn_pressed() -> void:
 	print(ip_port)
 	ConnectionProperties.ip = str(ip_port[0])
 	ConnectionProperties.port = int(ip_port[1])
+	ConnectionProperties.username = username.get_text()
 	
 	get_tree().call_deferred("change_scene_to_packed", scene)

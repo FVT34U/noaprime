@@ -1,8 +1,14 @@
 extends Sprite3D
-
+class_name IndicatorComponent
 
 @export_category("Components")
 @export var state_machine: CharacterStateMachine
+
+@onready var username_label = $SubViewport/Username
+
+
+func set_username(username: String):
+	username_label.set_text(username)
 
 
 func _ready():

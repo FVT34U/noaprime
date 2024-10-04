@@ -60,6 +60,7 @@ text = "IP"
 
 [node name="IPInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
+text = "localhost:8000"
 placeholder_text = "127.0.0.1:8000"
 
 [node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer"]

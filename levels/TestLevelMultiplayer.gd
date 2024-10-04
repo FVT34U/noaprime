@@ -11,6 +11,20 @@ const PORT = 8000
 var _unavailable_spawnpoints: Array[Node3D] = []
 
 
+@rpc("any_peer", "call_local")
+func set_players_username(player_id: int, username: String):
+	ConnectionProperties.id_usernames[player_id] = username
+	
+	for player in players_list_node.get_children():
+		if player:
+			print("qwe ", player.multiplayer.get_unique_id())
+			player.indicator_component.set_username(
+				ConnectionProperties.id_usernames[player.multiplayer.get_unique_id()]
+			)
+	
+	print(ConnectionProperties.id_usernames)
+
+
 @rpc("authority", "call_remote")
 func spawn_weapon_impact(impact_scene_path: String, position: Vector3):
 	#var scene = load(impact_scene_path)
@@ -22,6 +36,12 @@ func spawn_weapon_impact(impact_scene_path: String, position: Vector3):
 func get_local_player() -> Node:
 	for child in players_list_node.get_children():
 		if child is Node and child.name == str(multiplayer.get_unique_id()):
+			return child
+	return null
+	
+func get_player_by_id(id: int) -> Node:
+	for child in players_list_node.get_children():
+		if child is Node and child.name == str(id):
 			return child
 	return null
 

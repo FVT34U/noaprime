@@ -50,13 +50,14 @@ properties/7/path = NodePath("Head:rotation")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
-[node name="PlayerController" type="Node" node_paths=PackedStringArray("player_movement_component", "health_component", "stamina_component", "weapon_component", "state_machine")]
+[node name="PlayerController" type="Node" node_paths=PackedStringArray("player_movement_component", "health_component", "stamina_component", "weapon_component", "state_machine", "indicator_component")]
 script = ExtResource("1_birm8")
 player_movement_component = NodePath("PlayerMovementComponent")
 health_component = NodePath("HealthComponent")
 stamina_component = NodePath("StaminaComponent")
 weapon_component = NodePath("WeaponComponent")
 state_machine = NodePath("StateMachine")
+indicator_component = NodePath("PlayerMovementComponent/IndicatorComponent")
 
 [node name="PlayerMovementComponent" type="CharacterBody3D" parent="." node_paths=PackedStringArray("player_controller", "stamina_component", "head_hitbox", "body_hitbox")]
 script = ExtResource("3_utork")
