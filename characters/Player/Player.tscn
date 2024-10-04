@@ -37,6 +37,18 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath("../StaminaComponent:stamina")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath("Head/SmoothCamera/Camera3D:position")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("Head/SmoothCamera/Camera3D:rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("Head:position")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("Head:rotation")
+properties/7/spawn = true
+properties/7/replication_mode = 1
 
 [node name="PlayerController" type="Node" node_paths=PackedStringArray("player_movement_component", "health_component", "stamina_component", "weapon_component", "state_machine")]
 script = ExtResource("1_birm8")

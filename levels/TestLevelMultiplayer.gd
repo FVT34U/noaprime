@@ -1,13 +1,22 @@
 extends Node3D
-
+class_name GameMode
 
 const PORT = 8000
 
 @onready var player_scene = load('res://characters/Player/Player.tscn')
 @onready var players_list_node = $PlayersList
+@onready var weapon_impact = load("res://utils/TestSphere.tscn")
 
 @export var spawnpoints: Array[Node3D] = []
 var _unavailable_spawnpoints: Array[Node3D] = []
+
+
+@rpc("authority", "call_remote")
+func spawn_weapon_impact(impact_scene_path: String, position: Vector3):
+	#var scene = load(impact_scene_path)
+	var impact = weapon_impact.instantiate()
+	impact.global_position = position
+	add_child(impact)
 
 
 func get_local_player() -> Node:

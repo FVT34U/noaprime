@@ -10,6 +10,7 @@ class_name WeaponComponent
 
 # shooting impact
 @onready var test_sphere = preload("res://utils/TestSphere.tscn")
+var test_sphere_path = "res://utils/TestSphere.tscn"
 
 
 enum SHOOTING_MODE {AUTO, SEMI_AUTO}
@@ -32,7 +33,10 @@ func have_gun() -> bool:
 func get_gun():
 	return active_weapon_slot.get_child(0)
 
-func shoot():
+@rpc("authority", "call_remote")
+func shoot(owner_id: int):
+	if not multiplayer.is_server(): return
+	
 	var space_state = controller.player_movement_component.get_world_3d().direct_space_state
 	var screen_center = get_viewport().size / 2
 	var origin = controller.camera.global_position # sadly shooting from camera :-(
@@ -80,10 +84,7 @@ func shoot():
 	
 	if obj_result:
 		# debug, make it for impact things
-		var t = test_sphere.instantiate()
-		t.position = obj_result.get("position")
-		t.exists_time = shot_impact_exist_time
-		controller.world.add_child(t)
+		controller.world.rpc("spawn_weapon_impact", test_sphere_path, obj_result.get("position"))
 	
 	if hit_result:
 		var collider = hit_result.get("collider")
@@ -104,7 +105,7 @@ func shoot():
 				get_gun().damage,
 				multiplier,
 				DamageData.get_type().BASE,
-				controller.multiplayer.get_unique_id(),
+				owner_id,
 			)
 			collider.rpc("take_damage", dmg.to_dict())
 
@@ -115,7 +116,7 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("shoot") and can_shoot:
 		if not have_gun():
 			return
-		shoot()
+		rpc("shoot", multiplayer.get_unique_id())
 
 
 func _ready():

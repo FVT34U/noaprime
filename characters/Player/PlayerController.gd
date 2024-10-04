@@ -15,7 +15,7 @@ class_name PlayerController
 
 
 var hud: Control
-var world: Node3D
+var world: GameMode
 
 var is_menu_opened = false
 
