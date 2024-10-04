@@ -83,11 +83,13 @@ func _unhandled_key_input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			player_movement_component.disable_camera_control()
 			player_movement_component.disable_movement()
+			weapon_component.disable_shooting()
 			is_menu_opened = true
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			player_movement_component.enable_camera_control()
 			player_movement_component.enable_movement()
+			weapon_component.enable_shooting()
 			is_menu_opened = false
 
 

@@ -45,6 +45,7 @@ func _unhandled_key_input(event):
 			chat_input.grab_focus()
 			controller.player_movement_component.disable_movement()
 			controller.player_movement_component.disable_camera_control()
+			controller.weapon_component.disable_shooting()
 
 
 func _ready():
@@ -77,6 +78,7 @@ func _on_chat_input_text_submitted(new_text):
 		chat_input.release_focus()
 		controller.player_movement_component.enable_movement()
 		controller.player_movement_component.enable_camera_control()
+		controller.weapon_component.enable_shooting()
 		
 		chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
@@ -86,6 +88,7 @@ func _on_chat_input_text_change_rejected(rejected_substring):
 	chat_input.release_focus()
 	controller.player_movement_component.enable_movement()
 	controller.player_movement_component.enable_camera_control()
+	controller.weapon_component.enable_shooting()
 
 
 func _on_chat_input_focus_exited():
@@ -93,6 +96,7 @@ func _on_chat_input_focus_exited():
 	chat_input.release_focus()
 	controller.player_movement_component.enable_movement()
 	controller.player_movement_component.enable_camera_control()
+	controller.weapon_component.enable_shooting()
 
 
 func _on_health_value_changed(new_hp: float):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d21vfafwu2pix"]
+[gd_scene load_steps=16 format=3 uid="uid://d21vfafwu2pix"]
 
 [ext_resource type="Script" path="res://characters/Player/PlayerController.gd" id="1_birm8"]
 [ext_resource type="PackedScene" uid="uid://c70j4gwjolfxr" path="res://weapons/DefaultGun.tscn" id="3_4oaxr"]
@@ -20,6 +20,9 @@ height = 0.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fd00r"]
 height = 1.2
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nahgb"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rv7ds"]
 properties/0/path = NodePath(".:position")
@@ -111,6 +114,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, -0.75, 0)
 
 [node name="IndicatorComponent" parent="PlayerMovementComponent" node_paths=PackedStringArray("state_machine") instance=ExtResource("5_hklya")]
+texture = SubResource("ViewportTexture_nahgb")
 state_machine = NodePath("../../StateMachine")
 
 [node name="HealthComponent" type="Node" parent="." node_paths=PackedStringArray("controller")]

@@ -4,12 +4,11 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b7rkqamts5gjf"
-path="res://.godot/imported/floor.blend-1b3e95d81146bfbad7f9025c13777aa0.scn"
+valid=false
 
 [deps]
 
 source_file="res://meshes/floor.blend"
-dest_files=["res://.godot/imported/floor.blend-1b3e95d81146bfbad7f9025c13777aa0.scn"]
 
 [params]
 
