@@ -12,17 +12,21 @@ var _unavailable_spawnpoints: Array[Node3D] = []
 
 
 @rpc("any_peer", "call_local")
-func set_players_username(player_id: int, username: String):
-	ConnectionProperties.id_usernames[player_id] = username
+func register_player(player_id: int, username: String):
+	if multiplayer.is_server():
+		ConnectionProperties.id_usernames[player_id] = username
+		rpc("update_players_usernames", ConnectionProperties.id_usernames)
+
+@rpc("any_peer", "call_local")
+func update_players_usernames(id_usernames: Dictionary):
+	#if is_multiplayer_authority():
+	ConnectionProperties.id_usernames = id_usernames
 	
 	for player in players_list_node.get_children():
 		if player:
-			print("qwe ", player.multiplayer.get_unique_id())
 			player.indicator_component.set_username(
-				ConnectionProperties.id_usernames[player.multiplayer.get_unique_id()]
+				ConnectionProperties.id_usernames[player.name.to_int()]
 			)
-	
-	print(ConnectionProperties.id_usernames)
 
 
 @rpc("authority", "call_remote")
@@ -47,7 +51,7 @@ func get_player_by_id(id: int) -> Node:
 
 
 @rpc("any_peer", "call_local")
-func chat_message(sender_id: int, msg: String):
+func chat_message(sender_id, msg: String):
 	var player = get_local_player()
 	if player:
 		if player.hud:
@@ -64,11 +68,9 @@ func add_player(id: int):
 	player.player_movement_component.global_position = sp.global_position
 	_unavailable_spawnpoints.append(sp)
 	
-	print("[{timestamp}][LOG]: Player {id} added".format({"timestamp": DateTime.get_current_time(), "id": id}))
-	
 	rpc(
 		'chat_message',
-		multiplayer.get_unique_id(),
+		1,
 		'Player {id} connected!'.format({"id": id}),
 	)
 
@@ -77,7 +79,7 @@ func remove_player(id: int):
 	players_list_node.get_node(str(id)).queue_free()
 	rpc(
 		'chat_message',
-		 multiplayer.get_unique_id(),
+		 1,
 		 'Player {id} disconnected!'.format({"id": id}),
 	)
 
@@ -119,9 +121,9 @@ func _ready():
 			multiplayer.peer_connected.connect(add_player)
 			multiplayer.peer_disconnected.connect(remove_player)
 			
-			print("[{timestamp}][LOG]: SERVER CREATED".format({"timestamp": DateTime.get_current_time()}))
+			Logger.log("SERVER CREATED")
 	else:
 		var res = peer.create_client(ConnectionProperties.ip, ConnectionProperties.port)
 		if res == OK:
 			multiplayer.multiplayer_peer = peer
-			print("[{timestamp}][LOG]: Client connected".format({"timestamp": DateTime.get_current_time()}))
+			Logger.log("Client connected")

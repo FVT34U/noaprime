@@ -26,9 +26,9 @@ var color = Color(1, 0, 0)
 var width = 1
 
 
-func add_chat_message(sender_id: int, msg: String):
+func add_chat_message(sender_id, msg: String):
 	var msg_label = Label.new()
-	msg_label.text = '[{id}]: {msg}'.format({"id": sender_id, "msg": msg})
+	msg_label.text = '[{id}]: {msg}'.format({"id": ConnectionProperties.id_usernames[sender_id], "msg": msg})
 	
 	chat.add_child(msg_label)
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value

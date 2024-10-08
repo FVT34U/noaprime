@@ -33,13 +33,13 @@ func death_handler(init_id: int):
 			1,
 			"{pid} was killed by {initiator}".format(
 				{
-					"pid": name.to_int(),
-					"initiator": init_id,
+					"pid": ConnectionProperties.id_usernames[name.to_int()],
+					"initiator": ConnectionProperties.id_usernames[init_id],
 				}
 			),
 		)
 		
-		print("[{timestamp}][LOG]: Message sended from server".format({"timestamp": DateTime.get_current_time()}))
+		Logger.log("Message sended from server", 1)
 	
 	if is_multiplayer_authority():
 		# Set cursor visible
@@ -116,7 +116,7 @@ func _ready():
 		add_child(hud)
 	
 	# Set username
-	world.rpc("set_players_username", multiplayer.get_unique_id(), ConnectionProperties.username)
+	world.rpc("register_player", multiplayer.get_unique_id(), ConnectionProperties.username)
 	
 	# Mouse cursor to game
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
