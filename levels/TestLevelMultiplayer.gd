@@ -52,6 +52,7 @@ func get_player_by_id(id: int) -> Node:
 
 @rpc("any_peer", "call_local")
 func chat_message(sender_id, msg: String):
+	Logger.log("chat message: " + msg, sender_id)
 	var player = get_local_player()
 	if player:
 		if player.hud:
