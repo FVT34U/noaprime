@@ -5,7 +5,7 @@ const PORT = 8000
 
 @onready var player_scene = load('res://characters/Player/Player.tscn')
 @onready var players_list_node = $PlayersList
-@onready var weapon_impact = load("res://utils/TestSphere.tscn")
+@onready var weapon_impact = load("res://VFX/WeaponImpact.tscn")
 
 @export var spawnpoints: Array[Node3D] = []
 var _unavailable_spawnpoints: Array[Node3D] = []
@@ -30,11 +30,13 @@ func update_players_usernames(id_usernames: Dictionary):
 
 
 @rpc("authority", "call_remote")
-func spawn_weapon_impact(impact_scene_path: String, position: Vector3):
+func spawn_weapon_impact(position: Vector3, normal: Vector3 = Vector3(0, 1, 0)):
 	#var scene = load(impact_scene_path)
 	var impact = weapon_impact.instantiate()
-	impact.global_position = position
 	add_child(impact)
+	impact.global_position = position
+	impact.get_process_material().set_direction(normal)
+	impact.set_emitting(true)
 
 
 func get_local_player() -> Node:

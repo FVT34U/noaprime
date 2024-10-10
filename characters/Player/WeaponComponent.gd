@@ -84,7 +84,7 @@ func shoot(owner_id: int):
 	
 	if obj_result:
 		# debug, make it for impact things
-		controller.world.rpc("spawn_weapon_impact", test_sphere_path, obj_result.get("position"))
+		controller.world.rpc("spawn_weapon_impact", obj_result.get("position"), obj_result.get("normal"))
 	
 	if hit_result:
 		var collider = hit_result.get("collider")
