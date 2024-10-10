@@ -4,19 +4,26 @@ class_name WeaponComponent
 @export_category("Components")
 @export var active_weapon_slot: Node3D
 @export var controller: PlayerController
+@export var fire_rate_timer: Timer
+@export var reload_timer: Timer
 
 @export_category("Stats")
 @export var shot_impact_exist_time = 5.0
 
-# shooting impact
-@onready var test_sphere = preload("res://utils/TestSphere.tscn")
-var test_sphere_path = "res://utils/TestSphere.tscn"
-
 
 enum SHOOTING_MODE {AUTO, SEMI_AUTO}
-var cur_shooting_mode = SHOOTING_MODE.SEMI_AUTO
+var cur_shooting_mode = SHOOTING_MODE.AUTO
+
+var clip_size: int
+var cur_rounds: int
+var stored_ammo: int = 300
 
 var can_shoot = false
+var is_reloading = false
+
+signal rounds_value_changed(rounds_new_val: int)
+signal stored_ammo_value_changed(stored_ammo_new_value: int)
+
 
 func enable_shooting():
 	can_shoot = true
@@ -30,7 +37,7 @@ func have_gun() -> bool:
 		return true
 	return false
 	
-func get_gun():
+func get_gun() -> DefaultGun:
 	return active_weapon_slot.get_child(0)
 
 @rpc("authority", "call_remote")
@@ -83,7 +90,7 @@ func shoot(owner_id: int):
 		return
 	
 	if obj_result:
-		# debug, make it for impact things
+		# Weapon impact
 		controller.world.rpc("spawn_weapon_impact", obj_result.get("position"), obj_result.get("normal"))
 	
 	if hit_result:
@@ -109,14 +116,50 @@ func shoot(owner_id: int):
 			)
 			collider.rpc("take_damage", dmg.to_dict())
 
+func _shoot_handle():
+	rpc("shoot", multiplayer.get_unique_id())
+	can_shoot = false
+	fire_rate_timer.start(get_gun().fire_rate)
+	cur_rounds -= 1
+	rounds_value_changed.emit(cur_rounds)
+	if cur_rounds <= 0:
+		can_shoot = false
+		is_reloading = true
+		reload_timer.start(get_gun().reload_time)
+
+
+func reload():
+	can_shoot = false
+	is_reloading = true
+	reload_timer.start(get_gun().reload_time)
+
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
-	if Input.is_action_just_pressed("shoot") and can_shoot:
-		if not have_gun():
-			return
-		rpc("shoot", multiplayer.get_unique_id())
+	if not have_gun(): return
+	
+	if is_reloading: return
+	
+	# Reloading
+	if Input.is_action_just_pressed("reload"):
+		reload()
+	
+	# Change shooting mode
+	if Input.is_action_just_pressed("change_shooting_mode"):
+		if cur_shooting_mode == SHOOTING_MODE.SEMI_AUTO:
+			cur_shooting_mode = SHOOTING_MODE.AUTO
+		elif cur_shooting_mode == SHOOTING_MODE.AUTO:
+			cur_shooting_mode = SHOOTING_MODE.SEMI_AUTO
+	
+	if not can_shoot: return
+	
+	if cur_shooting_mode == SHOOTING_MODE.SEMI_AUTO:
+		if Input.is_action_just_pressed("shoot"):
+			_shoot_handle()
+	elif cur_shooting_mode == SHOOTING_MODE.AUTO:
+		if Input.is_action_pressed("shoot"):
+			_shoot_handle()
 
 
 func _ready():
@@ -124,6 +167,16 @@ func _ready():
 	
 	controller.death.connect(_on_death)
 	controller.respawn.connect(_on_respawn)
+	
+	clip_size = get_gun().clip_size
+	cur_rounds = clip_size
+	
+	stored_ammo -= clip_size # Need to be expanded for check stored_ammo value before subtraction
+	cur_rounds = clip_size
+	
+	await get_tree().create_timer(1).timeout
+	rounds_value_changed.emit(cur_rounds)
+	stored_ammo_value_changed.emit(stored_ammo)
 
 
 func _on_death():
@@ -131,3 +184,18 @@ func _on_death():
 
 func _on_respawn():
 	enable_shooting()
+
+
+func _on_fire_rate_timer_timeout() -> void:
+	can_shoot = true
+
+
+func _on_reload_timer_timeout() -> void:
+	can_shoot = true
+	is_reloading = false
+	
+	stored_ammo -= clip_size # Need to be expanded for check stored_ammo value before subtraction
+	cur_rounds = clip_size
+	
+	rounds_value_changed.emit(cur_rounds)
+	stored_ammo_value_changed.emit(stored_ammo)

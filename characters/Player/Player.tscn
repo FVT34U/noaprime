@@ -89,6 +89,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.472824, -0.259424, -0.75893
 [node name="Gun" parent="PlayerMovementComponent/Head/ActiveWeaponSlot" instance=ExtResource("3_4oaxr")]
 damage = 10.0
 headshot_multiplier = 2.0
+fire_rate = 0.2
+clip_size = 20
+
+[node name="FireRateTimer" type="Timer" parent="PlayerMovementComponent/Head/ActiveWeaponSlot"]
+one_shot = true
+
+[node name="ReloadTimer" type="Timer" parent="PlayerMovementComponent/Head/ActiveWeaponSlot"]
+one_shot = true
 
 [node name="HeadHitBox" type="Area3D" parent="PlayerMovementComponent" node_paths=PackedStringArray("health_component")]
 collision_layer = 4096
@@ -140,10 +148,12 @@ controller = NodePath("..")
 movement_component = NodePath("../PlayerMovementComponent")
 state_machine = NodePath("../StateMachine")
 
-[node name="WeaponComponent" type="Node" parent="." node_paths=PackedStringArray("active_weapon_slot", "controller")]
+[node name="WeaponComponent" type="Node" parent="." node_paths=PackedStringArray("active_weapon_slot", "controller", "fire_rate_timer", "reload_timer")]
 script = ExtResource("7_2kp8g")
 active_weapon_slot = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot")
 controller = NodePath("..")
+fire_rate_timer = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot/FireRateTimer")
+reload_timer = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot/ReloadTimer")
 shot_impact_exist_time = 1.0
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("controller", "movement_component")]
@@ -154,3 +164,6 @@ movement_component = NodePath("../PlayerMovementComponent")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 root_path = NodePath("../PlayerMovementComponent")
 replication_config = SubResource("SceneReplicationConfig_rv7ds")
+
+[connection signal="timeout" from="PlayerMovementComponent/Head/ActiveWeaponSlot/FireRateTimer" to="WeaponComponent" method="_on_fire_rate_timer_timeout"]
+[connection signal="timeout" from="PlayerMovementComponent/Head/ActiveWeaponSlot/ReloadTimer" to="WeaponComponent" method="_on_reload_timer_timeout"]

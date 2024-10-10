@@ -34,6 +34,9 @@ class_name DefaultGun
 @export var crouch_movement_speed: float
 @export var sprint_speed: float
 
+@export_category("Ammo")
+@export var clip_size: int
+
 
 @onready var muzzle = $Muzzle
 

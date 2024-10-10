@@ -11,6 +11,10 @@ $Interface/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer
 $Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer/HealthValue
 @onready var stamina_value_label = \
 $Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer2/StaminaValue
+@onready var cur_rounds_value = \
+$Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/CurRounds
+@onready var cur_stored_ammo_value = \
+$Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/CurStoredAmmo
 
 @onready var interface = $Interface
 @onready var crosshair = $Crosshair
@@ -60,6 +64,16 @@ func _ready():
 	.stamina_component\
 	.stamina_value_changed\
 	.connect(_on_stamina_value_changed)
+	
+	controller\
+	.weapon_component\
+	.rounds_value_changed\
+	.connect(_on_rounds_value_changed)
+	
+	controller\
+	.weapon_component\
+	.stored_ammo_value_changed\
+	.connect(_on_stored_ammo_value_changed)
 	
 	#queue_redraw()
 	
@@ -115,3 +129,10 @@ func _on_respawn():
 	death_screen.visible = false
 	crosshair.visible = true
 	interface.visible = true
+
+
+func _on_rounds_value_changed(new_rounds: int):
+	cur_rounds_value.set_text(str(new_rounds))
+
+func _on_stored_ammo_value_changed(new_stored_ammo: int):
+	cur_stored_ammo_value.set_text(str(new_stored_ammo))
