@@ -92,12 +92,6 @@ headshot_multiplier = 2.0
 fire_rate = 0.2
 clip_size = 20
 
-[node name="FireRateTimer" type="Timer" parent="PlayerMovementComponent/Head/ActiveWeaponSlot"]
-one_shot = true
-
-[node name="ReloadTimer" type="Timer" parent="PlayerMovementComponent/Head/ActiveWeaponSlot"]
-one_shot = true
-
 [node name="HeadHitBox" type="Area3D" parent="PlayerMovementComponent" node_paths=PackedStringArray("health_component")]
 collision_layer = 4096
 collision_mask = 2048
@@ -152,9 +146,15 @@ state_machine = NodePath("../StateMachine")
 script = ExtResource("7_2kp8g")
 active_weapon_slot = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot")
 controller = NodePath("..")
-fire_rate_timer = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot/FireRateTimer")
-reload_timer = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot/ReloadTimer")
+fire_rate_timer = NodePath("FireRateTimer")
+reload_timer = NodePath("ReloadTimer")
 shot_impact_exist_time = 1.0
+
+[node name="FireRateTimer" type="Timer" parent="WeaponComponent"]
+one_shot = true
+
+[node name="ReloadTimer" type="Timer" parent="WeaponComponent"]
+one_shot = true
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("controller", "movement_component")]
 script = ExtResource("8_vuaqr")
@@ -165,5 +165,5 @@ movement_component = NodePath("../PlayerMovementComponent")
 root_path = NodePath("../PlayerMovementComponent")
 replication_config = SubResource("SceneReplicationConfig_rv7ds")
 
-[connection signal="timeout" from="PlayerMovementComponent/Head/ActiveWeaponSlot/FireRateTimer" to="WeaponComponent" method="_on_fire_rate_timer_timeout"]
-[connection signal="timeout" from="PlayerMovementComponent/Head/ActiveWeaponSlot/ReloadTimer" to="WeaponComponent" method="_on_reload_timer_timeout"]
+[connection signal="timeout" from="WeaponComponent/FireRateTimer" to="WeaponComponent" method="_on_fire_rate_timer_timeout"]
+[connection signal="timeout" from="WeaponComponent/ReloadTimer" to="WeaponComponent" method="_on_reload_timer_timeout"]

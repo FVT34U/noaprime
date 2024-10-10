@@ -16,7 +16,7 @@ var cur_shooting_mode = SHOOTING_MODE.AUTO
 
 var clip_size: int
 var cur_rounds: int
-var stored_ammo: int = 300
+var stored_ammo: int = 20
 
 var can_shoot = false
 var is_reloading = false
@@ -194,8 +194,13 @@ func _on_reload_timer_timeout() -> void:
 	can_shoot = true
 	is_reloading = false
 	
-	stored_ammo -= clip_size # Need to be expanded for check stored_ammo value before subtraction
-	cur_rounds = clip_size
+	var restore = clip_size - cur_rounds
+	if stored_ammo - restore <= 0:
+		cur_rounds = cur_rounds + stored_ammo
+		stored_ammo = 0
+	else:
+		cur_rounds = clip_size
+		stored_ammo -= restore
 	
 	rounds_value_changed.emit(cur_rounds)
 	stored_ammo_value_changed.emit(stored_ammo)
