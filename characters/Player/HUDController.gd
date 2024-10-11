@@ -12,9 +12,11 @@ $Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer/HealthValue
 @onready var stamina_value_label = \
 $Interface/VBoxContainer/Control/HBoxContainer/Control/HBoxContainer2/StaminaValue
 @onready var cur_rounds_value = \
-$Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/CurRounds
+$Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/CurRounds
 @onready var cur_stored_ammo_value = \
 $Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/CurStoredAmmo
+@onready var cur_clip_size_value = \
+$Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ClipSize
 
 @onready var interface = $Interface
 @onready var crosshair = $Crosshair
@@ -74,6 +76,11 @@ func _ready():
 	.weapon_component\
 	.stored_ammo_value_changed\
 	.connect(_on_stored_ammo_value_changed)
+	
+	controller\
+	.weapon_component\
+	.clip_size_value_changed\
+	.connect(_on_clip_size_value_changed)
 	
 	#queue_redraw()
 	
@@ -136,3 +143,6 @@ func _on_rounds_value_changed(new_rounds: int):
 
 func _on_stored_ammo_value_changed(new_stored_ammo: int):
 	cur_stored_ammo_value.set_text(str(new_stored_ammo))
+
+func _on_clip_size_value_changed(new_clip_size: int):
+	cur_clip_size_value.set_text(str(new_clip_size))

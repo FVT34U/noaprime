@@ -20,9 +20,11 @@ var stored_ammo: int = 20
 
 var can_shoot = false
 var is_reloading = false
+var can_reload = true
 
 signal rounds_value_changed(rounds_new_val: int)
 signal stored_ammo_value_changed(stored_ammo_new_value: int)
+signal clip_size_value_changed(clip_size_new_value: int)
 
 
 func enable_shooting():
@@ -30,6 +32,14 @@ func enable_shooting():
 	
 func disable_shooting():
 	can_shoot = false
+
+func enable_reloading():
+	can_reload = true
+	is_reloading = false
+
+func disable_reloading():
+	can_reload = false
+	is_reloading = false
 
 
 func have_gun() -> bool:
@@ -50,11 +60,6 @@ func shoot(owner_id: int):
 	var end = origin + \
 		controller.camera.project_ray_normal(screen_center) * \
 		get_gun().max_range
-	
-	# Debug ray from start to end point translated to screen coords
-	#controller.hud.start = controller.camera.unproject_position(origin)
-	#controller.hud.end = controller.camera.unproject_position(end)
-	#controller.hud.queue_redraw()
 	
 	# shooting to any object and create an impact
 	var obj_query = PhysicsRayQueryParameters3D.create(
@@ -117,29 +122,52 @@ func shoot(owner_id: int):
 			collider.rpc("take_damage", dmg.to_dict())
 
 func _shoot_handle():
+	if cur_rounds <= 0:
+		reload()
+		return
+	
 	rpc("shoot", multiplayer.get_unique_id())
-	can_shoot = false
+	disable_shooting()
 	fire_rate_timer.start(get_gun().fire_rate)
 	cur_rounds -= 1
 	rounds_value_changed.emit(cur_rounds)
-	if cur_rounds <= 0:
-		can_shoot = false
-		is_reloading = true
-		reload_timer.start(get_gun().reload_time)
 
 
 func reload():
-	can_shoot = false
+	if not can_reload: return
+	
+	disable_shooting()
 	is_reloading = true
 	reload_timer.start(get_gun().reload_time)
 
 
-func _unhandled_input(event):
+func _ready():
+	if not is_multiplayer_authority(): return
+	
+	controller.death.connect(_on_death)
+	controller.respawn.connect(_on_respawn)
+	
+	clip_size = get_gun().clip_size
+	cur_rounds = clip_size
+	
+	reload()
+	
+	await get_tree().create_timer(get_gun().reload_time).timeout
+	clip_size_value_changed.emit(clip_size)
+
+
+func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if not have_gun(): return
 	
 	if is_reloading: return
+	
+	# Debug add ammo
+	if Input.is_action_just_pressed("debug_add_ammo"):
+		stored_ammo += 20
+		stored_ammo_value_changed.emit(stored_ammo)
+		enable_reloading()
 	
 	# Reloading
 	if Input.is_action_just_pressed("reload"):
@@ -162,42 +190,26 @@ func _unhandled_input(event):
 			_shoot_handle()
 
 
-func _ready():
-	if not is_multiplayer_authority(): return
-	
-	controller.death.connect(_on_death)
-	controller.respawn.connect(_on_respawn)
-	
-	clip_size = get_gun().clip_size
-	cur_rounds = clip_size
-	
-	stored_ammo -= clip_size # Need to be expanded for check stored_ammo value before subtraction
-	cur_rounds = clip_size
-	
-	await get_tree().create_timer(1).timeout
-	rounds_value_changed.emit(cur_rounds)
-	stored_ammo_value_changed.emit(stored_ammo)
-
-
 func _on_death():
 	disable_shooting()
+	disable_reloading()
 
 func _on_respawn():
 	enable_shooting()
-
+	enable_reloading()
 
 func _on_fire_rate_timer_timeout() -> void:
-	can_shoot = true
-
+	enable_shooting()
 
 func _on_reload_timer_timeout() -> void:
-	can_shoot = true
+	enable_shooting()
 	is_reloading = false
 	
 	var restore = clip_size - cur_rounds
 	if stored_ammo - restore <= 0:
 		cur_rounds = cur_rounds + stored_ammo
 		stored_ammo = 0
+		disable_reloading()
 	else:
 		cur_rounds = clip_size
 		stored_ammo -= restore

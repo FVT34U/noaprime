@@ -154,18 +154,41 @@ size_flags_vertical = 3
 [node name="Label" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Rounds:"
+horizontal_alignment = 1
 
-[node name="CurRounds" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CurRounds" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Delimeter" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClipSize" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+vertical_alignment = 1
 
 [node name="Label2" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Ammo:"
+horizontal_alignment = 1
 
 [node name="CurStoredAmmo" type="Label" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "0"
+horizontal_alignment = 1
 
 [node name="Control2" type="Control" parent="Interface/VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
