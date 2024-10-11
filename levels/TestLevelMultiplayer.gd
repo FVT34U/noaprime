@@ -31,7 +31,6 @@ func update_players_usernames(id_usernames: Dictionary):
 
 @rpc("authority", "call_remote")
 func spawn_weapon_impact(position: Vector3, normal: Vector3 = Vector3(0, 1, 0)):
-	#var scene = load(impact_scene_path)
 	var impact = weapon_impact.instantiate()
 	add_child(impact)
 	impact.global_position = position

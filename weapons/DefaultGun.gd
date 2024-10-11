@@ -1,10 +1,26 @@
 extends Node3D
-class_name DefaultGun
+class_name Weapon
 
+enum WEAPON_TYPE {
+	PISTOL,
+	SNIPER_RIFLE,
+	MARKSMAN_RIFLE,
+	ASSAULT_RIFLE,
+	BATTLE_RIFLE,
+	SMG,
+	MACHINE_GUN,
+	SHOTGUN,
+}
+
+@export_category("Type")
+@export var weapon_type: WEAPON_TYPE = WEAPON_TYPE.PISTOL
 
 @export_category("Damage")
 @export var damage: float
 @export var headshot_multiplier: float
+
+@export_category("Ammo")
+@export var clip_size: int
 
 @export_category("Range")
 @export var max_range: float
@@ -34,18 +50,5 @@ class_name DefaultGun
 @export var crouch_movement_speed: float
 @export var sprint_speed: float
 
-@export_category("Ammo")
-@export var clip_size: int
-
 
 @onready var muzzle = $Muzzle
-
-
-func shoot():
-	pass
-
-func reload():
-	pass
-
-func aim():
-	pass

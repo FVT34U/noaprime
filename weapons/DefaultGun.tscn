@@ -16,6 +16,7 @@ height = 0.2
 
 [node name="DefaultGun" type="Node3D"]
 script = ExtResource("1_yodbv")
+clip_size = 20
 max_range = 1000.0
 
 [node name="GunMesh" type="MeshInstance3D" parent="."]
