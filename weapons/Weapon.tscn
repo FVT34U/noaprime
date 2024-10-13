@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c70j4gwjolfxr"]
 
-[ext_resource type="Script" path="res://weapons/DefaultGun.gd" id="1_yodbv"]
+[ext_resource type="Script" path="res://weapons/Weapon.gd" id="1_yodbv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3bkfq"]
 radius = 0.1

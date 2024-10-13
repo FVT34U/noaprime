@@ -1,15 +1,12 @@
 extends Node
 class_name WeaponComponent
 
+
 @export_category("Components")
 @export var active_weapon_slot: Node3D
 @export var controller: PlayerController
 @export var fire_rate_timer: Timer
 @export var reload_timer: Timer
-
-@export_category("Stats")
-@export var shot_impact_exist_time = 5.0
-
 
 enum SHOOTING_MODE {AUTO, SEMI_AUTO}
 var cur_shooting_mode = SHOOTING_MODE.AUTO
@@ -47,7 +44,7 @@ func have_gun() -> bool:
 		return true
 	return false
 	
-func get_gun() -> DefaultGun:
+func get_gun() -> Weapon:
 	return active_weapon_slot.get_child(0)
 
 @rpc("authority", "call_remote")
@@ -59,7 +56,7 @@ func shoot(owner_id: int):
 	var origin = controller.camera.global_position # sadly shooting from camera :-(
 	var end = origin + \
 		controller.camera.project_ray_normal(screen_center) * \
-		get_gun().max_range
+		get_gun().stats.max_range
 	
 	# shooting to any object and create an impact
 	var obj_query = PhysicsRayQueryParameters3D.create(
@@ -96,7 +93,11 @@ func shoot(owner_id: int):
 	
 	if obj_result:
 		# Weapon impact
-		controller.world.rpc("spawn_weapon_impact", obj_result.get("position"), obj_result.get("normal"))
+		controller.world.rpc(
+			"spawn_weapon_impact",
+			obj_result.get("position"),
+			obj_result.get("normal")
+		)
 	
 	if hit_result:
 		var collider = hit_result.get("collider")
@@ -110,11 +111,11 @@ func shoot(owner_id: int):
 				HitboxType.HITBOX_TYPE.BODY:
 					multiplier = 1.0
 				HitboxType.HITBOX_TYPE.HEAD:
-					multiplier = get_gun().headshot_multiplier
+					multiplier = get_gun().stats.headshot_multiplier
 				_: multiplier = 1.0
 				
 			var dmg = DamageData.new(
-				get_gun().damage,
+				get_gun().stats.damage,
 				multiplier,
 				DamageData.get_type().BASE,
 				owner_id,
@@ -128,7 +129,7 @@ func _shoot_handle():
 	
 	rpc("shoot", multiplayer.get_unique_id())
 	disable_shooting()
-	fire_rate_timer.start(get_gun().fire_rate)
+	fire_rate_timer.start(get_gun().stats.fire_rate)
 	cur_rounds -= 1
 	rounds_value_changed.emit(cur_rounds)
 
@@ -138,7 +139,7 @@ func reload():
 	
 	disable_shooting()
 	is_reloading = true
-	reload_timer.start(get_gun().reload_time)
+	reload_timer.start(get_gun().stats.reload_time)
 
 
 func _ready():
@@ -147,12 +148,12 @@ func _ready():
 	controller.death.connect(_on_death)
 	controller.respawn.connect(_on_respawn)
 	
-	clip_size = get_gun().clip_size
+	clip_size = get_gun().stats.clip_size
 	cur_rounds = clip_size
 	
 	reload()
 	
-	await get_tree().create_timer(get_gun().reload_time).timeout
+	await get_tree().create_timer(get_gun().stats.reload_time).timeout
 	clip_size_value_changed.emit(clip_size)
 
 

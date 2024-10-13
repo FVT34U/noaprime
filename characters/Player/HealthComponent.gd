@@ -28,7 +28,7 @@ func take_damage(dmg: DamageData):
 	health -= dmg.value * dmg.multiplier
 	health_value_changed.emit(health)
 
-	if is_zero_approx(health):
+	if health <= 0.0:
 		_death(dmg.initiator_id)
 
 

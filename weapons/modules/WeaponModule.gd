@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 class_name WeaponModule
 
 enum WEAPON_MODULE_TYPE {
@@ -9,5 +9,6 @@ enum WEAPON_MODULE_TYPE {
 	OPTICS,
 }
 
-@export_category("Type")
-@export var weapon_module_type: WEAPON_MODULE_TYPE = WEAPON_MODULE_TYPE.BARREL
+@export var wm_name: String
+@export var type: WEAPON_MODULE_TYPE
+@onready var stats = null # WeaponModuleStats

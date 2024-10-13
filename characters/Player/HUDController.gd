@@ -82,8 +82,6 @@ func _ready():
 	.clip_size_value_changed\
 	.connect(_on_clip_size_value_changed)
 	
-	#queue_redraw()
-	
 	controller.death.connect(_on_death)
 	controller.respawn.connect(_on_respawn)
 

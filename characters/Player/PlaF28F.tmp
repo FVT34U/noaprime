@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://d21vfafwu2pix"]
 
 [ext_resource type="Script" path="res://characters/Player/PlayerController.gd" id="1_birm8"]
-[ext_resource type="PackedScene" uid="uid://c70j4gwjolfxr" path="res://weapons/Weapon.tscn" id="3_4oaxr"]
+[ext_resource type="PackedScene" uid="uid://c70j4gwjolfxr" path="res://weapons/DefaultGun.tscn" id="3_4oaxr"]
 [ext_resource type="Script" path="res://characters/Player/PlayerMovementComponent.gd" id="3_utork"]
 [ext_resource type="Script" path="res://characters/Player/HitBoxComponent.gd" id="4_2aedl"]
 [ext_resource type="PackedScene" uid="uid://bhxdmow1u62ry" path="res://characters/Player/IndicatorComponent.tscn" id="5_hklya"]
@@ -87,8 +87,9 @@ fov = 90.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.472824, -0.259424, -0.758938)
 
 [node name="Gun" parent="PlayerMovementComponent/Head/ActiveWeaponSlot" instance=ExtResource("3_4oaxr")]
-w_name = "N32"
-type = 3
+damage = 10.0
+headshot_multiplier = 2.0
+fire_rate = 0.2
 
 [node name="HeadHitBox" type="Area3D" parent="PlayerMovementComponent" node_paths=PackedStringArray("health_component")]
 collision_layer = 4096
@@ -146,6 +147,7 @@ active_weapon_slot = NodePath("../PlayerMovementComponent/Head/ActiveWeaponSlot"
 controller = NodePath("..")
 fire_rate_timer = NodePath("FireRateTimer")
 reload_timer = NodePath("ReloadTimer")
+shot_impact_exist_time = 1.0
 
 [node name="FireRateTimer" type="Timer" parent="WeaponComponent"]
 one_shot = true
