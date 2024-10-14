@@ -4,12 +4,11 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dqrh27h7juao"
-path="res://.godot/imported/mercenary_f.blend-e26d7e3ac9dfb1ba1c00ffce0d18e357.scn"
+valid=false
 
 [deps]
 
 source_file="res://meshes/mercenary_f.blend"
-dest_files=["res://.godot/imported/mercenary_f.blend-e26d7e3ac9dfb1ba1c00ffce0d18e357.scn"]
 
 [params]
 

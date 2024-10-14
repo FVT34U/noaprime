@@ -3,12 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b7rkqamts5gjf"
-valid=false
+uid="uid://bu8ygckr1ui0s"
+path="res://.godot/imported/wheel.blend-75f8ef3077fd9bd885e6f56fa765c885.scn"
 
 [deps]
 
-source_file="res://meshes/floor.blend"
+source_file="res://meshes/wheel.blend"
+dest_files=["res://.godot/imported/wheel.blend-75f8ef3077fd9bd885e6f56fa765c885.scn"]
 
 [params]
 

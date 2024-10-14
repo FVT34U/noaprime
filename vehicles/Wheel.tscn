@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cccecfyfpatxi"]
+
+[ext_resource type="PackedScene" uid="uid://bu8ygckr1ui0s" path="res://meshes/wheel.blend" id="1_u2ok4"]
+
+[node name="wheel" instance=ExtResource("1_u2ok4")]

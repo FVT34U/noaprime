@@ -1,0 +1,108 @@
+[gd_scene load_steps=8 format=3 uid="uid://d200d8xddyewa"]
+
+[ext_resource type="Script" path="res://vehicles/Vehicle.gd" id="1_fuh5o"]
+[ext_resource type="PackedScene" uid="uid://bu8ygckr1ui0s" path="res://meshes/wheel.blend" id="2_gyjr1"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uq8my"]
+friction = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_maatj"]
+size = Vector3(1, 1.5, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m2sqv"]
+size = Vector3(1, 1.4, 2.8)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_s1usf"]
+height = 0.2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_penth"]
+
+[node name="VehicleBase" type="Node3D"]
+
+[node name="VehicleBody3D" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mass = 500.0
+physics_material_override = SubResource("PhysicsMaterial_uq8my")
+center_of_mass_mode = 1
+script = ExtResource("1_fuh5o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_maatj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 1.19209e-07)
+shape = SubResource("BoxShape3D_m2sqv")
+
+[node name="Wheel1" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, 1.9)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.2
+wheel_radius = 0.55
+wheel_rest_length = 0.4
+wheel_friction_slip = 1.0
+
+[node name="wheel" parent="VehicleBody3D/Wheel1" instance=ExtResource("2_gyjr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="VehicleBody3D/Wheel1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D/Wheel1/RigidBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_s1usf")
+
+[node name="Wheel2" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, -0.4, 1.9)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.2
+wheel_radius = 0.55
+wheel_rest_length = 0.4
+wheel_friction_slip = 1.0
+
+[node name="wheel" parent="VehicleBody3D/Wheel2" instance=ExtResource("2_gyjr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="VehicleBody3D/Wheel2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D/Wheel2/RigidBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_s1usf")
+
+[node name="Wheel3" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, -0.4, -1.5)
+use_as_traction = true
+wheel_roll_influence = 0.2
+wheel_radius = 0.55
+wheel_rest_length = 0.4
+wheel_friction_slip = 1.0
+
+[node name="wheel" parent="VehicleBody3D/Wheel3" instance=ExtResource("2_gyjr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="VehicleBody3D/Wheel3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D/Wheel3/RigidBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_s1usf")
+
+[node name="Wheel4" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -0.4, -1.5)
+use_as_traction = true
+wheel_roll_influence = 0.2
+wheel_radius = 0.55
+wheel_rest_length = 0.4
+wheel_friction_slip = 1.0
+
+[node name="wheel" parent="VehicleBody3D/Wheel4" instance=ExtResource("2_gyjr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="VehicleBody3D/Wheel4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D/Wheel4/RigidBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_s1usf")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_penth")

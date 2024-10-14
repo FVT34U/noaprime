@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cqabylfp6pth7"]
+[gd_scene load_steps=7 format=3 uid="uid://cqabylfp6pth7"]
 
 [ext_resource type="Script" path="res://levels/TestLevelMultiplayer.gd" id="1_mrq7m"]
 [ext_resource type="Material" uid="uid://cusisavohms3t" path="res://materials/gray_grid.tres" id="2_gp58n"]
+[ext_resource type="PackedScene" uid="uid://d200d8xddyewa" path="res://vehicles/VehicleBase.tscn" id="3_mba3u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4bejx"]
 sky_top_color = Color(0.772299, 0.813545, 0.871145, 1)
@@ -273,3 +274,6 @@ _spawnable_scenes = PackedStringArray("res://characters/Player/Player.tscn")
 spawn_path = NodePath("../PlayersList")
 
 [node name="PlayersList" type="Node" parent="."]
+
+[node name="VehicleBase" parent="." instance=ExtResource("3_mba3u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.88956, 0.964846, 3.66642)
