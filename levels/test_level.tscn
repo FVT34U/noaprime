@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cqabylfp6pth7"]
+[gd_scene load_steps=9 format=3 uid="uid://cqabylfp6pth7"]
 
 [ext_resource type="Script" path="res://levels/TestLevelMultiplayer.gd" id="1_mrq7m"]
 [ext_resource type="Material" uid="uid://cusisavohms3t" path="res://materials/gray_grid.tres" id="2_gp58n"]
@@ -20,6 +20,12 @@ background_mode = 2
 sky = SubResource("Sky_2r0hm")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_8x4ai"]
+size = Vector3(10, 0.2, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e6jac"]
+size = Vector3(10, 0.2, 100)
 
 [node name="World" type="Node3D" node_paths=PackedStringArray("spawnpoints")]
 script = ExtResource("1_mrq7m")
@@ -276,4 +282,13 @@ spawn_path = NodePath("../PlayersList")
 [node name="PlayersList" type="Node" parent="."]
 
 [node name="VehicleBase" parent="." instance=ExtResource("3_mba3u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.88956, 0.964846, 3.66642)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8896, 0.964846, 3.66642)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 0)
+mesh = SubResource("BoxMesh_8x4ai")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("BoxShape3D_e6jac")

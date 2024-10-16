@@ -92,6 +92,38 @@ func _unhandled_key_input(event):
 			player_movement_component.enable_movement()
 			weapon_component.enable_shooting()
 			is_menu_opened = false
+	
+	# Interact
+	if Input.is_action_just_pressed("interact"):
+		var space_state = player_movement_component.get_world_3d().direct_space_state
+		var screen_center = get_viewport().size / 2
+		var origin = camera.global_position # sadly shooting from camera :-(
+		var end = origin + \
+			camera.project_ray_normal(screen_center) * \
+			1000
+		
+		# shooting to any object
+		var obj_query = PhysicsRayQueryParameters3D.create(
+			origin,
+			end,
+			1,
+			[
+				player_movement_component,
+				player_movement_component.head_hitbox,
+				player_movement_component.body_hitbox,
+			],
+		)
+		obj_query.collide_with_areas = false
+		obj_query.collide_with_bodies = true
+		var obj_result = space_state.intersect_ray(obj_query)
+		
+		if not obj_result:
+			print("no object")
+			return
+		
+		var coll = obj_result.get("collider")
+		if not coll.has_meta("Interactable"): return
+		coll.interact(self)
 
 
 func _physics_process(_delta):

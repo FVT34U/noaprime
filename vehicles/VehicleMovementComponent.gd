@@ -1,9 +1,14 @@
 extends VehicleBody3D
+class_name VehicleMovementComponent
 
 const STEER_SPEED = 1.5
-const STEER_LIMIT = 0.4
+const STEER_LIMIT = 0.6
 const BRAKE_STRENGTH = 2.0
 
+@export_category("Components")
+@export var controller: VehicleController
+
+@export_category("Stats")
 @export var engine_force_value := 40.0
 
 var previous_speed := linear_velocity.length()
@@ -12,9 +17,14 @@ var _steer_target := 0.0
 #@onready var desired_engine_pitch: float = $EngineSound.pitch_scale
 
 func _physics_process(delta: float):
+	if not is_multiplayer_authority(): return
+	
 	var fwd_mps := (linear_velocity * transform.basis).x
-
-	_steer_target = Input.get_axis(&"turn_right", &"turn_left")
+	
+	if controller.is_possessed:
+		_steer_target = Input.get_axis("move_right", "move_left")
+	else: # only for debug
+		_steer_target = Input.get_axis("turn_right", "turn_left")
 	_steer_target *= STEER_LIMIT
 
 	# Engine sound simulation (not realistic, as this car script has no notion of gear or engine RPM).
@@ -32,7 +42,8 @@ func _physics_process(delta: float):
 		pass
 
 	# Automatically accelerate when using touch controls (reversing overrides acceleration).
-	if DisplayServer.is_touchscreen_available() or Input.is_action_pressed(&"accelerate"):
+	if controller.is_possessed and \
+		(DisplayServer.is_touchscreen_available() or Input.is_action_pressed("move_forward")):
 		# Increase engine force at low speeds to make the initial acceleration faster.
 		var speed := linear_velocity.length()
 		if speed < 5.0 and not is_zero_approx(speed):
@@ -42,11 +53,12 @@ func _physics_process(delta: float):
 
 		if not DisplayServer.is_touchscreen_available():
 			# Apply analog throttle factor for more subtle acceleration if not fully holding down the trigger.
-			engine_force *= Input.get_action_strength(&"accelerate")
+			engine_force *= Input.get_action_strength("move_forward") if controller.is_possessed \
+				else Input.get_action_strength("accelerate")
 	else:
 		engine_force = 0.0
 
-	if Input.is_action_pressed(&"reverse"):
+	if controller.is_possessed and Input.is_action_pressed("move_back"):
 		# Increase engine force at low speeds to make the initial reversing faster.
 		var speed := linear_velocity.length()
 		if speed < 5.0 and not is_zero_approx(speed):
@@ -55,8 +67,13 @@ func _physics_process(delta: float):
 			engine_force = -engine_force_value * BRAKE_STRENGTH
 
 		# Apply analog brake factor for more subtle braking if not fully holding down the trigger.
-		engine_force *= Input.get_action_strength(&"reverse")
+		engine_force *= Input.get_action_strength("move_back") if controller.is_possessed \
+			else Input.get_action_strength("reverse")
 
 	steering = move_toward(steering, _steer_target, STEER_SPEED * delta)
 
 	previous_speed = linear_velocity.length()
+
+
+func interact(p_controller: PlayerController):
+	controller.interact(p_controller)
