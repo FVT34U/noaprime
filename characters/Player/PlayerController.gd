@@ -132,12 +132,13 @@ func _physics_process(_delta):
 	
 	if Input.is_action_just_pressed("ads"):
 		print(state_machine.State.find_key(state_machine.current_state))
+		print(world.players_list)
 
 
 func _ready():
 	# Get ref to World
 	if not world:
-		world = $"../.."
+		world = get_parent()
 	
 	# If not local pawn - exit
 	if not is_multiplayer_authority(): return

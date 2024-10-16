@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d200d8xddyewa"]
+[gd_scene load_steps=8 format=3 uid="uid://d200d8xddyewa"]
 
 [ext_resource type="Script" path="res://vehicles/VehicleController.gd" id="1_6m82k"]
 [ext_resource type="Script" path="res://vehicles/VehicleMovementComponent.gd" id="1_fuh5o"]
@@ -16,8 +16,6 @@ size = Vector3(1, 1.4, 2.8)
 [sub_resource type="CylinderMesh" id="CylinderMesh_2eyw1"]
 material = ExtResource("3_uqm8k")
 height = 0.2
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_penth"]
 
 [node name="VehicleController" type="Node3D" node_paths=PackedStringArray("movement_component")]
 script = ExtResource("1_6m82k")
@@ -45,7 +43,7 @@ shape = SubResource("BoxShape3D_m2sqv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.5, 1.9)
 use_as_traction = true
 use_as_steering = true
-wheel_roll_influence = 0.8
+wheel_roll_influence = 0.4
 wheel_rest_length = 0.4
 wheel_friction_slip = 1.0
 suspension_travel = 0.1
@@ -59,7 +57,7 @@ mesh = SubResource("CylinderMesh_2eyw1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, 1.9)
 use_as_traction = true
 use_as_steering = true
-wheel_roll_influence = 0.8
+wheel_roll_influence = 0.4
 wheel_rest_length = 0.4
 wheel_friction_slip = 1.0
 suspension_travel = 0.1
@@ -72,7 +70,7 @@ mesh = SubResource("CylinderMesh_2eyw1")
 [node name="Wheel3" type="VehicleWheel3D" parent="VehicleMovementComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.5, -1.5)
 use_as_traction = true
-wheel_roll_influence = 0.8
+wheel_roll_influence = 0.4
 wheel_rest_length = 0.4
 wheel_friction_slip = 1.0
 suspension_travel = 0.1
@@ -85,7 +83,7 @@ mesh = SubResource("CylinderMesh_2eyw1")
 [node name="Wheel4" type="VehicleWheel3D" parent="VehicleMovementComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.5, -1.5)
 use_as_traction = true
-wheel_roll_influence = 0.8
+wheel_roll_influence = 0.4
 wheel_rest_length = 0.4
 wheel_friction_slip = 1.0
 suspension_travel = 0.1
@@ -97,6 +95,3 @@ mesh = SubResource("CylinderMesh_2eyw1")
 
 [node name="DriverSeat" type="Node3D" parent="VehicleMovementComponent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.877, 0)
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_penth")

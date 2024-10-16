@@ -277,12 +277,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://characters/Player/Player.tscn")
-spawn_path = NodePath("../PlayersList")
+spawn_path = NodePath("..")
 
 [node name="PlayersList" type="Node" parent="."]
-
-[node name="VehicleBase" parent="." instance=ExtResource("3_mba3u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8896, 0.964846, 3.66642)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0, 0)
@@ -292,3 +289,6 @@ mesh = SubResource("BoxMesh_8x4ai")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
 shape = SubResource("BoxShape3D_e6jac")
+
+[node name="VehicleController" parent="." instance=ExtResource("3_mba3u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 0)
