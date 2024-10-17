@@ -17,7 +17,8 @@ var _steer_target := 0.0
 #@onready var desired_engine_pitch: float = $EngineSound.pitch_scale
 
 func _physics_process(delta: float):
-	#if not is_multiplayer_authority(): return
+	if controller.driver:
+		if not controller.driver.is_multiplayer_authority(): return
 	
 	var fwd_mps := (linear_velocity * transform.basis).x
 	if controller.is_possessed:

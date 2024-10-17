@@ -4,6 +4,7 @@ class_name GameMode
 const PORT = 8000
 
 @onready var player_scene = load('res://characters/Player/Player.tscn')
+@onready var vehicle_scene = load("res://vehicles/VehicleBase.tscn")
 @onready var players_list_node = $PlayersList
 @onready var weapon_impact = load("res://VFX/WeaponImpact.tscn")
 
@@ -15,14 +16,10 @@ var players_list: Array[PlayerController] = []
 
 @rpc("any_peer", "call_local")
 func register_player(player_id: int, username: String):
-	#for child in get_children():
-		#if child.name == str(player_id):
-			#players_list.append(child)
-			#break
-	
 	if multiplayer.is_server():
 		ConnectionProperties.id_usernames[player_id] = username
 		rpc("update_players_usernames", ConnectionProperties.id_usernames)
+
 
 @rpc("any_peer", "call_local")
 func update_players_usernames(id_usernames: Dictionary):
@@ -74,9 +71,7 @@ func add_player(id: int):
 	add_child(player)
 	players_list.append(player)
 	
-	var sp = _get_random_unique_spawnpoint()
-	player.player_movement_component.global_position = sp.global_position
-	_unavailable_spawnpoints.append(sp)
+	player.player_movement_component.global_position = get_spawnpoint()
 	
 	rpc(
 		'chat_message',
@@ -135,6 +130,11 @@ func _ready():
 			multiplayer.peer_disconnected.connect(remove_player)
 			
 			Logger.log("SERVER CREATED")
+			
+			await get_tree().create_timer(5).timeout
+			var vehicle = vehicle_scene.instantiate()
+			add_child(vehicle)
+			vehicle.global_position = get_spawnpoint()
 	else:
 		var res = peer.create_client(ConnectionProperties.ip, ConnectionProperties.port)
 		if res == OK:
