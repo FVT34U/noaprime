@@ -9,6 +9,7 @@ class_name IndicatorComponent
 
 func set_username(username: String):
 	username_label.set_text(username)
+	print(multiplayer.get_unique_id(), " ", username)
 
 
 func _ready():

@@ -292,3 +292,5 @@ shape = SubResource("BoxShape3D_e6jac")
 
 [node name="VehicleController" parent="." instance=ExtResource("3_mba3u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 0)
+
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

@@ -15,9 +15,10 @@ var players_list: Array[PlayerController] = []
 
 @rpc("any_peer", "call_local")
 func register_player(player_id: int, username: String):
-	var p = find_child(str(player_id))
-	print(p)
-	players_list.append(p)
+	#for child in get_children():
+		#if child.name == str(player_id):
+			#players_list.append(child)
+			#break
 	
 	if multiplayer.is_server():
 		ConnectionProperties.id_usernames[player_id] = username
@@ -25,15 +26,8 @@ func register_player(player_id: int, username: String):
 
 @rpc("any_peer", "call_local")
 func update_players_usernames(id_usernames: Dictionary):
-	#if is_multiplayer_authority():
 	ConnectionProperties.id_usernames = id_usernames
 	
-	#for player in players_list_node.get_children():
-		#if player:
-			#player.indicator_component.set_username(
-				#ConnectionProperties.id_usernames[player.name.to_int()]
-			#)
-			
 	for player in players_list:
 		if player:
 			player.indicator_component.set_username(
@@ -51,11 +45,6 @@ func spawn_weapon_impact(position: Vector3, normal: Vector3 = Vector3(0, 1, 0)):
 
 
 func get_local_player() -> PlayerController:
-	#for child in players_list_node.get_children():
-		#if child is Node and child.name == str(multiplayer.get_unique_id()):
-			#return child
-	#return null
-	
 	for player in players_list:
 		if player and player.name == str(multiplayer.get_unique_id()):
 			return player
@@ -63,11 +52,6 @@ func get_local_player() -> PlayerController:
 
 
 func get_player_by_id(id: int) -> PlayerController:
-	#for child in players_list_node.get_children():
-		#if child is Node and child.name == str(id):
-			#return child
-	#return null
-	
 	for player in players_list:
 		if player and player.name == str(id):
 			return player
@@ -88,6 +72,7 @@ func add_player(id: int):
 	player.name = str(id)
 	
 	add_child(player)
+	players_list.append(player)
 	
 	var sp = _get_random_unique_spawnpoint()
 	player.player_movement_component.global_position = sp.global_position
@@ -101,9 +86,8 @@ func add_player(id: int):
 
 
 func remove_player(id: int):
-	#players_list_node.get_node(str(id)).queue_free()
 	var player_to_remove = get_player_by_id(id)
-	players_list.remove_at(players_list.find(player_to_remove))
+	players_list.erase(player_to_remove)
 	player_to_remove.queue_free()
 	
 	rpc(
@@ -156,3 +140,8 @@ func _ready():
 		if res == OK:
 			multiplayer.multiplayer_peer = peer
 			Logger.log("Client connected")
+
+
+func _on_multiplayer_spawner_spawned(node: Node) -> void:
+	if is_instance_of(node, PlayerController):
+		players_list.append(node)
